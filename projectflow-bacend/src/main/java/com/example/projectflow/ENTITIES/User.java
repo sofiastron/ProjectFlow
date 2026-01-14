@@ -1,8 +1,10 @@
 package com.example.projectflow.ENTITIES;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.Builder;
 
+import java.time.LocalDateTime;
+@Builder
 @Entity
 @Table(name = "user")
 public class User {

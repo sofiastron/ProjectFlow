@@ -39,4 +39,34 @@ public class AuthServiceImpl implements AuthService {
                 .user(userDTO)
                 .build();
     }
+    @Override
+    public LoginResponse register(RegisterDTO registerDTO) {
+        if(userRepository.existsByEmail(registerDTO.getEmail())) {
+            throw new RuntimeException("Email déjà utilisé");
+        }
+
+        User user = User.builder()
+                .nom(registerDTO.getNom())
+                .email(registerDTO.getEmail())
+                .pasword(passwordEncoder.encode(registerDTO.getPassword()))
+                .role(User.Role.valueOf(registerDTO.getRole())) // par exemple "Professeur" ou "Etudiant"
+                .build();
+
+        userRepository.save(user);
+
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole().name());
+
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .nom(user.getNom())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .build();
+
+        return LoginResponse.builder()
+                .token(token)
+                .user(userDTO)
+                .build();
+    }
+
 }

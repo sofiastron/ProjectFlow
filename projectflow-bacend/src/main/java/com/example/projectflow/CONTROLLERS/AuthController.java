@@ -2,6 +2,7 @@ package com.example.projectflow.CONTROLLERS;
 
 import com.example.projectflow.DTOs.LoginDTO;
 import com.example.projectflow.DTOs.LoginResponse;
+import com.example.projectflow.DTOs.RegisterDTO;
 import com.example.projectflow.SERVICES.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +29,14 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
     }
+    @PostMapping("/register")
+    public ResponseEntity<LoginResponse> register(@RequestBody RegisterDTO registerDTO) {
+        try {
+            LoginResponse response = authService.register(registerDTO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
 }

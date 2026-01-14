@@ -6,12 +6,12 @@ export const useAuthStore = defineStore('auth', {
     user: null,
     token: localStorage.getItem('token') || null
   }),
-  
+
   getters: {
     isAuthenticated: (state) => !!state.token,
     currentUser: (state) => state.user
   },
-  
+
   actions: {
     async login(email, password) {
       try {
@@ -25,8 +25,21 @@ export const useAuthStore = defineStore('auth', {
         return false
       }
     },
-    
-    logout() {
+
+  async register({ nom, email, password, role }) {
+  try {
+    const response = await api.register({ nom, email, password, role })
+    this.token = response.data.token
+    this.user = response.data.user
+    localStorage.setItem('token', this.token)
+    return true
+  } catch (error) {
+    console.error('Erreur lors de l’inscription:', error)
+    return false
+  }
+  },
+
+  logout() {
       this.user = null
       this.token = null
       localStorage.removeItem('token')

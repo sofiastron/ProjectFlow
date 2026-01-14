@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/store'
+
 import Login from '@/components/Login.vue'
 import Layout from '@/components/Layout.vue'
 import Dashboard from '@/components/Dashboard.vue'
@@ -26,6 +28,10 @@ const routes = [
         component: Profile
       }
     ]
+  },
+  {
+    path: '/:pathMatch(.*)*', // route pour gérer 404
+    redirect: '/'
   }
 ]
 
@@ -34,16 +40,20 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   const token = localStorage.getItem('token')
-  
-//   if (to.meta.requiresAuth && !token) {
-//     next('/login')
-//   } else if (to.path === '/login' && token) {
-//     next('/')
-//   } else {
-//     next()
-//   }
-// })
+// Guard global
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore() // utilise Pinia pour vérifier l'auth
+  const isAuthenticated = authStore.isAuthenticated
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    // si la page nécessite auth et que l'utilisateur n'est pas connecté
+    next('/login')
+  } else if (to.path === '/login' && isAuthenticated) {
+    // si l'utilisateur connecté veut aller sur login
+    next('/')
+  } else {
+    next()
+  }
+})
 
 export default router
