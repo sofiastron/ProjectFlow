@@ -6,12 +6,14 @@
     </div>
 
     <div v-if="loading" class="text-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+      <!-- ✅ Spinner orange doux -->
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
       <p class="text-gray-600 mt-4">Chargement...</p>
     </div>
 
     <div v-else class="bg-white rounded-2xl shadow-sm overflow-hidden">
-      <div class="bg-gradient-to-r from-orange-400 to-orange-500 h-32"></div>
+      <!-- ✅ Bannière orange douce -->
+      <div class="bg-gradient-to-r from-amber-400 to-orange-500 h-32"></div>
       
       <div class="px-8 pb-8">
         <div class="flex items-end -mt-16 mb-6">
@@ -22,11 +24,12 @@
                    alt="Profile" 
                    class="w-full h-full rounded-full object-cover" />
               <div v-else 
-                   class="w-full h-full rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
+                   class="w-full h-full rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
                 <User class="text-white w-12 h-12" />
               </div>
             </div>
-            <label class="absolute bottom-0 right-0 bg-orange-500 text-white p-2 rounded-full cursor-pointer hover:bg-orange-600 transition-colors shadow-lg">
+            <!-- ✅ Bouton orange doux -->
+            <label class="absolute bottom-0 right-0 bg-amber-500 text-white p-2 rounded-full cursor-pointer hover:bg-amber-600 transition-colors shadow-lg">
               <input type="file" class="hidden" accept="image/*" @change="handlePhotoChange" />
               <Camera class="w-5 h-5" />
             </label>
@@ -52,7 +55,7 @@
               <input
                 type="text"
                 v-model="profile.nom"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
               />
             </div>
             
@@ -61,7 +64,7 @@
               <input
                 type="email"
                 v-model="profile.email"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
               />
             </div>
             
@@ -70,7 +73,7 @@
               <input
                 type="text"
                 v-model="profile.specialite"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
               />
             </div>
             
@@ -86,10 +89,11 @@
           </div>
 
           <div class="flex gap-4 pt-4">
+            <!-- ✅ Boutons orange doux -->
             <button
               @click="handleSave"
               :disabled="saving"
-              class="px-6 py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-lg font-medium hover:from-orange-500 hover:to-orange-600 transition-all shadow-md hover:shadow-lg disabled:opacity-50"
+              class="px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-medium hover:from-amber-500 hover:to-orange-600 transition-all shadow-md hover:shadow-lg disabled:opacity-50"
             >
               {{ saving ? 'Enregistrement...' : 'Enregistrer les modifications' }}
             </button>

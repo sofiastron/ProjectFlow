@@ -1,8 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center p-4">
+  <!-- ✅ Fond orange doux -->
+  <div class="min-h-screen bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
       <div class="text-center mb-8">
-        <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <!-- ✅ Logo orange doux -->
+        <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <BookOpen class="w-8 h-8 text-white" />
         </div>
         <h2 class="text-3xl font-bold text-gray-800">{{ mode === 'login' ? 'Connexion' : 'Inscription' }}</h2>
@@ -21,7 +23,7 @@
             v-model="nom"
             type="text"
             placeholder="Karim Alaoui"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
           />
         </div>
 
@@ -31,7 +33,7 @@
             v-model="email"
             type="email"
             placeholder="votre.email@university.ma"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
           />
         </div>
 
@@ -41,31 +43,34 @@
             v-model="password"
             type="password"
             placeholder="••••••••"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"
+            @keyup.enter="handleAuth"
           />
         </div>
 
         <!-- Role (seulement pour l'inscription) -->
         <div v-if="mode === 'register'">
           <label class="block text-sm font-medium text-gray-700 mb-2">Rôle</label>
-          <select v-model="role" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none">
+          <select v-model="role" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none">
             <option value="Professeur">Professeur</option>
             <option value="Etudiant">Etudiant</option>
           </select>
         </div>
 
+        <!-- ✅ Bouton orange doux -->
         <button
           @click="handleAuth"
           :disabled="loading"
-          class="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded-lg font-medium hover:from-orange-500 hover:to-orange-600 transition-all shadow-md hover:shadow-lg disabled:opacity-50"
+          class="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-medium hover:from-amber-500 hover:to-orange-600 transition-all shadow-md hover:shadow-lg disabled:opacity-50"
         >
           {{ loading ? (mode === 'login' ? 'Connexion...' : 'Inscription...') : (mode === 'login' ? 'Se connecter' : "S'inscrire") }}
         </button>
 
+        <!-- ✅ Lien orange doux -->
         <p class="text-center text-sm mt-2 text-gray-500">
           <span v-if="mode === 'login'">Pas encore de compte ?</span>
           <span v-else>Déjà un compte ?</span>
-          <button @click="toggleMode" class="text-orange-500 font-medium ml-1">
+          <button @click="toggleMode" class="text-amber-600 hover:text-orange-500 font-medium ml-1">
             {{ mode === 'login' ? "S'inscrire" : 'Se connecter' }}
           </button>
         </p>
