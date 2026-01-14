@@ -1,93 +1,117 @@
 package com.example.projectflow.ENTITIES;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer id;
+    @Column(nullable = false)
+    private String nom;
 
-        @Column(nullable = false)
-        private String nom;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-        @Column(nullable = false, unique = true)
-        private String email;
+    @Column(nullable = false)
+    private String pasword;
 
-        @Column(nullable = false)
-        private String pasword;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
-        @Enumerated(EnumType.STRING)
-        @Column(nullable = false)
-        private Role role;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-        @Column(name = "created_at")
-        private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
-        @Column(name = "updated_at")
-        private LocalDateTime updatedAt;
-
-        @PrePersist
-        protected void onCreate() {
-            createdAt = LocalDateTime.now();
-            updatedAt = LocalDateTime.now();
-        }
-
-        @PreUpdate
-        protected void onUpdate() {
-            updatedAt = LocalDateTime.now();
-        }
-
-    public String getPasword() {
-            return this.pasword;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public String getEmail() {
-            return this.email;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
-    public Role getRole() {
-            return this.role;
+    // Constructeurs
+    public User() {}
+
+    public User(Integer id, String nom, String email, String pasword, Role role,
+                LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.nom = nom;
+        this.email = email;
+        this.pasword = pasword;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public void setNom(String nom) {
-            this.nom=nom;
+    // Getters et Setters
+    public Integer getId() {
+        return id;
     }
 
-    public void setEmail(String email) {
-            this.email=email;
-    }
-
-    public LocalDateTime getCreatedAt() {
-            return this.createdAt;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNom() {
-            return this.nom;
+        return nom;
     }
 
-    public Integer getId() {
-            return this.id;
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasword() {
+        return pasword;
+    }
+
+    public void setPasword(String pasword) {
+        this.pasword = pasword;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public enum Role {
-            Admin, Professeur, Etudiant
-        }
+        Admin, Professeur, Etudiant
     }
-
-
+}

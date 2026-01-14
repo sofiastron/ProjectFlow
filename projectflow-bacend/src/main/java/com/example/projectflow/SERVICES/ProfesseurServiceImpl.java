@@ -12,12 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-
+@RequiredArgsConstructor
 public class ProfesseurServiceImpl implements ProfesseurService {
 
     private final ProfesseurRepository professeurRepository;
@@ -28,39 +27,26 @@ public class ProfesseurServiceImpl implements ProfesseurService {
     @Value("${upload.path}")
     private String uploadPath;
 
-    public ProfesseurServiceImpl(ProfesseurRepository professeurRepository, EtudiantRepository etudiantRepository, SujetRepository sujetRepository, UserRepository userRepository) {
-        this.professeurRepository = professeurRepository;
-        this.etudiantRepository = etudiantRepository;
-        this.sujetRepository = sujetRepository;
-        this.userRepository = userRepository;
-    }
-
-
-    // ===================== DASHBOARD =====================
-
     @Override
     @Transactional(readOnly = true)
     public DashboardStatsDTO getDashboardStats(Integer professeurId) {
-
         Professeur prof = professeurRepository.findById(professeurId)
                 .orElseThrow(() -> new RuntimeException("Professeur non trouvé"));
 
-        List<Etudiant> etudiants =
-                etudiantRepository.findByProfesseurIdOrderByUserCreatedAtDesc(professeurId);
-
-        List<Sujet> sujets =
-                sujetRepository.findByProfesseurId(professeurId);
+        List<Etudiant> etudiants = etudiantRepository.findByProfesseurIdOrderByUserCreatedAtDesc(professeurId);
+        List<Sujet> sujets = sujetRepository.findByProfesseurId(professeurId);
 
         int totalEtudiants = etudiants.size();
-        int projetsActifs = (int) sujets.stream()
-                .filter(s -> s.getEtudiant() != null)
-                .count();
+        int projetsActifs = (int) sujets.stream().filter(s -> s.getEtudiant() != null).count();
 
         long projetsTermines = sujets.stream()
                 .filter(s -> s.getTaches() != null && !s.getTaches().isEmpty())
-                .filter(s -> s.getTaches().stream()
-                        .allMatch(t -> t.getEtat() == Tache.Etat.TERMINE))
+                .filter(s -> s.getTaches().stream().allMatch(t -> t.getEtat() == Tache.Etat.TERMINE))
                 .count();
+
+        List<StatutProjetDTO> statutsProjets = calculateStatutsProjets(sujets);
+        List<ActiviteJourDTO> activiteHebdo = generateActiviteHebdo();
+        List<EtudiantRecentDTO> etudiantsRecents = getEtudiantsRecents(etudiants);
 
         return DashboardStatsDTO.builder()
                 .professeurNom(prof.getUser().getNom())
@@ -71,34 +57,28 @@ public class ProfesseurServiceImpl implements ProfesseurService {
                 .projetsTermines((int) projetsTermines)
                 .nouveauxTermines(1)
                 .projetsRevision(3)
-                .statutsProjets(calculateStatutsProjets(sujets))
-                .activiteHebdo(generateActiviteHebdo())
-                .etudiantsRecents(getEtudiantsRecents(etudiants))
+                .statutsProjets(statutsProjets)
+                .activiteHebdo(activiteHebdo)
+                .etudiantsRecents(etudiantsRecents)
                 .build();
     }
 
-    // ===================== STATUTS =====================
-
     private List<StatutProjetDTO> calculateStatutsProjets(List<Sujet> sujets) {
-
         int total = sujets.isEmpty() ? 1 : sujets.size();
 
         long enCours = sujets.stream()
                 .filter(s -> s.getTaches() != null && !s.getTaches().isEmpty())
-                .filter(s -> s.getTaches().stream()
-                        .anyMatch(t -> t.getEtat() == Tache.Etat.EN_COURS))
+                .filter(s -> s.getTaches().stream().anyMatch(t -> t.getEtat() == Tache.Etat.EN_COURS))
                 .count();
 
         long termines = sujets.stream()
                 .filter(s -> s.getTaches() != null && !s.getTaches().isEmpty())
-                .filter(s -> s.getTaches().stream()
-                        .allMatch(t -> t.getEtat() == Tache.Etat.TERMINE))
+                .filter(s -> s.getTaches().stream().allMatch(t -> t.getEtat() == Tache.Etat.TERMINE))
                 .count();
 
         long enRetard = sujets.stream()
                 .filter(s -> s.getTaches() != null && !s.getTaches().isEmpty())
-                .filter(s -> s.getTaches().stream()
-                        .anyMatch(t -> t.getEtat() == Tache.Etat.EN_RETARD))
+                .filter(s -> s.getTaches().stream().anyMatch(t -> t.getEtat() == Tache.Etat.EN_RETARD))
                 .count();
 
         return Arrays.asList(
@@ -108,14 +88,12 @@ public class ProfesseurServiceImpl implements ProfesseurService {
                         .pourcentage((double) enCours / total * 100)
                         .colorClass("bg-blue-500")
                         .build(),
-
                 StatutProjetDTO.builder()
                         .type("Terminés")
                         .count((int) termines)
                         .pourcentage((double) termines / total * 100)
                         .colorClass("bg-green-500")
                         .build(),
-
                 StatutProjetDTO.builder()
                         .type("En retard")
                         .count((int) enRetard)
@@ -124,8 +102,6 @@ public class ProfesseurServiceImpl implements ProfesseurService {
                         .build()
         );
     }
-
-    // ===================== ACTIVITÉ =====================
 
     private List<ActiviteJourDTO> generateActiviteHebdo() {
         return Arrays.asList(
@@ -138,8 +114,6 @@ public class ProfesseurServiceImpl implements ProfesseurService {
                 ActiviteJourDTO.builder().jour("Dim").valeur(5).build()
         );
     }
-
-    // ===================== ÉTUDIANTS =====================
 
     private List<EtudiantRecentDTO> getEtudiantsRecents(List<Etudiant> etudiants) {
         return etudiants.stream()
@@ -157,7 +131,8 @@ public class ProfesseurServiceImpl implements ProfesseurService {
     private String getInitiales(String nom) {
         String[] parts = nom.split(" ");
         if (parts.length >= 2) {
-            return (parts[0].charAt(0) + "" + parts[1].charAt(0)).toUpperCase();
+            return parts[0].substring(0, 1).toUpperCase() +
+                    parts[1].substring(0, 1).toUpperCase();
         }
         return nom.substring(0, Math.min(2, nom.length())).toUpperCase();
     }
@@ -166,12 +141,9 @@ public class ProfesseurServiceImpl implements ProfesseurService {
         return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
-    // ===================== PROFIL =====================
-
     @Override
     @Transactional(readOnly = true)
     public ProfesseurProfileDTO getProfesseurProfile(Integer professeurId) {
-
         Professeur prof = professeurRepository.findById(professeurId)
                 .orElseThrow(() -> new RuntimeException("Professeur non trouvé"));
 
@@ -188,9 +160,7 @@ public class ProfesseurServiceImpl implements ProfesseurService {
 
     @Override
     @Transactional
-    public ProfesseurProfileDTO updateProfesseurProfile(
-            Integer professeurId, ProfesseurProfileDTO dto) {
-
+    public ProfesseurProfileDTO updateProfesseurProfile(Integer professeurId, ProfesseurProfileDTO dto) {
         Professeur prof = professeurRepository.findById(professeurId)
                 .orElseThrow(() -> new RuntimeException("Professeur non trouvé"));
 
@@ -205,31 +175,28 @@ public class ProfesseurServiceImpl implements ProfesseurService {
         return getProfesseurProfile(professeurId);
     }
 
-    // ===================== UPLOAD =====================
-
     @Override
     @Transactional
     public String uploadProfilePhoto(Integer professeurId, MultipartFile file) {
-
         try {
-            String fileName = professeurId + "_" + System.currentTimeMillis()
-                    + getFileExtension(file.getOriginalFilename());
+            String fileName = professeurId + "_" + System.currentTimeMillis() +
+                    getFileExtension(file.getOriginalFilename());
 
             Path uploadDir = Paths.get(uploadPath);
-            Files.createDirectories(uploadDir);
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
 
             Path filePath = uploadDir.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             return "/uploads/photos/" + fileName;
-
         } catch (IOException e) {
             throw new RuntimeException("Erreur lors de l'upload de la photo", e);
         }
     }
 
     private String getFileExtension(String filename) {
-        if (filename == null || !filename.contains(".")) return "";
         return filename.substring(filename.lastIndexOf("."));
     }
 }

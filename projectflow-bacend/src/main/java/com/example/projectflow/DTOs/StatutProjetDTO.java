@@ -1,9 +1,6 @@
 package com.example.projectflow.DTOs;
 
-
-
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
@@ -13,5 +10,3 @@ public class StatutProjetDTO {
     private Double pourcentage;
     private String colorClass;
 }
-
-
