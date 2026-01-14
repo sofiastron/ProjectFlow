@@ -8,20 +8,19 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "professeur") // correspond à la table SQL
+@Table(name = "professeur")
 public class Professeur {
 
     @Id
-    private Long id; // même id que User
+    private Long id; 
 
     @OneToOne
-    @MapsId // utilise le même id que User
+    @MapsId 
     @JoinColumn(name = "id")
     private User user;
 
     private String specialite;
 
-    // ----- Getters & Setters -----
     public Long getId() {
         return id;
     }

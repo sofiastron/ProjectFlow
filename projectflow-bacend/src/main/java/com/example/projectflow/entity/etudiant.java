@@ -10,27 +10,26 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "etudiant") // correspond à la table SQL
+@Table(name = "etudiant") 
 public class etudiant {
 
     @Id
     private Long id; 
 
     @OneToOne
-    @MapsId // utilise le même id que User
+    @MapsId 
     @JoinColumn(name = "id")
     private User user;
 
     private String filiere;
 
-    @Column(unique = true) // IMPORT AJOUTÉ pour éviter l'erreur
+    @Column(unique = true)
     private String cin;
 
     @ManyToOne
     @JoinColumn(name = "professeur_id")
     private Professeur professeur;
 
-    // ----- Getters & Setters -----
     public Long getId() {
         return id;
     }

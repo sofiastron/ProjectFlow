@@ -16,7 +16,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user") // correspond à la table SQL
+@Table(name = "user") 
 public class User {
 
     @Id
@@ -29,7 +29,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // On garde le même nom que dans la base pour éviter les problèmes : "pasword"
+    
     @Column(name = "pasword", nullable = false)
     private String password;
 
@@ -43,11 +43,11 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // ----- Constructeurs -----
+    
     public User() {
     }
 
-    // ----- Getters & Setters -----
+    
     public Long getId() {
         return id;
     }
@@ -96,7 +96,7 @@ public class User {
         return updatedAt;
     }
 
-    // ----- Méthodes pour gérer automatiquement les dates -----
+    
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

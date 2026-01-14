@@ -13,7 +13,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "notification") // correspond à la table SQL
+@Table(name = "notification") 
 public class Notification {
 
     @Id
@@ -31,7 +31,6 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // ----- Getters & Setters -----
     public Long getId() {
         return id;
     }
@@ -72,7 +71,6 @@ public class Notification {
         this.user = user;
     }
 
-    // ----- Méthode pour initialiser la date -----
     @PrePersist
     protected void onCreate() {
         if (this.date == null) {

@@ -8,20 +8,18 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "admin") // correspond à la table SQL
+@Table(name = "admin") 
 public class admin {
 
     @Id
-    private Long id; // même id que User
-
+    private Long id; 
     @OneToOne
-    @MapsId // utilise le même id que User
+    @MapsId 
     @JoinColumn(name = "id")
     private User user;
 
     private String fieldType;
 
-    // ----- Getters & Setters -----
     public Long getId() {
         return id;
     }

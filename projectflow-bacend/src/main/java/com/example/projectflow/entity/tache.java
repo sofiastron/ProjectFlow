@@ -16,8 +16,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tache") // correspond à la table SQL
-public class tache {
+@Table(name = "tache") 
+public class Tache {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,13 +36,12 @@ public class tache {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TaskStatus etat; // correspond à la colonne "etat" de la table SQL
-
+    private TaskStatus etat; 
     @ManyToOne
     @JoinColumn(name = "sujet_id", nullable = false)
     private Sujet sujet;
 
-    // ----- Getters & Setters -----
+
     public Long getId() {
         return id;
     }

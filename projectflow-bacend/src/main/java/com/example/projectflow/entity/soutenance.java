@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "soutenance") // correspond à la table SQL
+@Table(name = "soutenance")
 public class soutenance {
 
     @Id
@@ -43,7 +43,7 @@ public class soutenance {
     @JoinColumn(name = "professeur_id", nullable = false)
     private Professeur professeur;
 
-    // ----- Getters & Setters -----
+
     public Long getId() {
         return id;
     }

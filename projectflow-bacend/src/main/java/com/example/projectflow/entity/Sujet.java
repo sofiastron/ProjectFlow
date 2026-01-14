@@ -17,7 +17,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "sujets") // correspond à la table SQL
+@Table(name = "sujets") 
 public class Sujet {
 
     @Id
@@ -29,6 +29,8 @@ public class Sujet {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+    
+    private int progression;
 
     private LocalDate createdAt;
     private LocalDate updatedAt;
@@ -42,9 +44,9 @@ public class Sujet {
     private etudiant etudiant;
 
     @OneToMany(mappedBy = "sujet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<tache> taches;
+    private List<Tache> taches;
 
-    // ----- Getters & Setters -----
+
     public Long getId() {
         return id;
     }
@@ -101,15 +103,15 @@ public class Sujet {
         this.etudiant = etudiant;
     }
 
-    public List<tache> getTaches() {
+    public List<Tache> getTaches() {
         return taches;
     }
 
-    public void setTaches(List<tache> taches) {
+    public void setTaches(List<Tache> taches) {
         this.taches = taches;
     }
 
-    // ----- Méthodes pour gérer les dates -----
+    
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {
