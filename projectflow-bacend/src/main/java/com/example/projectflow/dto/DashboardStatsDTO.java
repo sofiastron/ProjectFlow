@@ -1,0 +1,15 @@
+package com.example.projectflow.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DashboardStatsDTO {
+	private long totalRapports;
+	private long valides;
+	private long enCours;
+	private long aCorriger;
+}
