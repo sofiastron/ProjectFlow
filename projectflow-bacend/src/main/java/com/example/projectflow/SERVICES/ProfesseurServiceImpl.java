@@ -14,7 +14,7 @@ import java.nio.file.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import com.example.projectflow.DTOs.EtudiantDTO;
 @Service
 @RequiredArgsConstructor
 public class ProfesseurServiceImpl implements ProfesseurService {
@@ -198,5 +198,36 @@ public class ProfesseurServiceImpl implements ProfesseurService {
 
     private String getFileExtension(String filename) {
         return filename.substring(filename.lastIndexOf("."));
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<EtudiantDTO> getEtudiantsAssignes(Integer professeurId) {
+        List<Etudiant> etudiants = etudiantRepository
+                .findByProfesseurIdOrderByUserCreatedAtDesc(professeurId);
+
+        return etudiants.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private EtudiantDTO convertToDTO(Etudiant etudiant) {
+        boolean hasProjet = etudiant.getSujets() != null && !etudiant.getSujets().isEmpty();
+        String projetTitre = null;
+
+        if (hasProjet) {
+            Sujet sujet = etudiant.getSujets().get(0);
+            projetTitre = sujet.getTitre();
+        }
+
+        return EtudiantDTO.builder()
+                .id(etudiant.getId())
+                .nom(etudiant.getUser().getNom())
+                .email(etudiant.getUser().getEmail())
+                .filiere(etudiant.getFiliere())
+                .cin(etudiant.getCin())
+                .hasProjet(hasProjet)
+                .projetTitre(projetTitre)
+                .dateAssignation(formatDate(etudiant.getUser().getCreatedAt()))
+                .build();
     }
 }

@@ -100,6 +100,20 @@
               <span class="font-medium">Mon Profil</span>
             </button>
           </router-link>
+          <!-- ✅ NOUVEAU: Liste des Étudiants -->
+<router-link to="/etudiants" v-slot="{ isActive }">
+  <button
+    :class="[
+      'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all',
+      isActive 
+        ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-white shadow-md' 
+        : 'text-gray-600 hover:bg-gray-100'
+    ]"
+  >
+    <Users :size="20" />
+    <span class="font-medium">Mes Étudiants</span>
+  </button>
+</router-link>
         </nav>
       </aside>
 
@@ -115,7 +129,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/store'
-import { LayoutDashboard, User, Bell, MessageSquare, ChevronDown, LogOut, BookOpen } from 'lucide-vue-next'
+import { LayoutDashboard,Users,User, Bell, MessageSquare, ChevronDown, LogOut, BookOpen } from 'lucide-vue-next'
 
 export default {
   name: 'Layout',

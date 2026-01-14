@@ -5,6 +5,7 @@ import Login from '@/components/Login.vue'
 import Layout from '@/components/Layout.vue'
 import Dashboard from '@/components/Dashboard.vue'
 import Profile from '@/components/Profile.vue'
+import EtudiantsList from '@/components/EtudiantsList.vue'
 
 const routes = [
   {
@@ -26,11 +27,16 @@ const routes = [
         path: 'profile',
         name: 'Profile',
         component: Profile
+      },
+      {
+        path: 'etudiants',
+        name: 'Etudiants',
+        component: EtudiantsList
       }
     ]
   },
   {
-    path: '/:pathMatch(.*)*', // route pour gérer 404
+    path: '/:pathMatch(.*)*',
     redirect: '/'
   }
 ]
@@ -42,14 +48,12 @@ const router = createRouter({
 
 // Guard global
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore() // utilise Pinia pour vérifier l'auth
+  const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    // si la page nécessite auth et que l'utilisateur n'est pas connecté
     next('/login')
   } else if (to.path === '/login' && isAuthenticated) {
-    // si l'utilisateur connecté veut aller sur login
     next('/')
   } else {
     next()

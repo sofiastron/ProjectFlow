@@ -1,4 +1,4 @@
-package com.example.projectflow.CONFIG;
+package com.example.projectflow.CONFIGURATION;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

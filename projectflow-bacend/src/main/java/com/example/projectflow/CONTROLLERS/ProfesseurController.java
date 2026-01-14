@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
-
+import com.example.projectflow.DTOs.EtudiantDTO;
+import java.util.List;
 @RestController
 @RequestMapping("/api/professeur")
 
@@ -51,5 +52,11 @@ public class ProfesseurController {
         Integer professeurId = (Integer) request.getAttribute("userId");
         String photoUrl = professeurService.uploadProfilePhoto(professeurId, file);
         return ResponseEntity.ok(Map.of("photoUrl", photoUrl));
+    }
+    @GetMapping("/etudiants")
+    public ResponseEntity<List<EtudiantDTO>> getEtudiantsAssignes(HttpServletRequest request) {
+        Integer professeurId = (Integer) request.getAttribute("userId");
+        List<EtudiantDTO> etudiants = professeurService.getEtudiantsAssignes(professeurId);
+        return ResponseEntity.ok(etudiants);
     }
 }

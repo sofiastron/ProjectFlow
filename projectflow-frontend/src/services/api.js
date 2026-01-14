@@ -39,5 +39,8 @@ export default {
   updateProfesseurProfile(data) { return api.put('/professeur/profile', data) },
   uploadProfilePhoto(formData) {
     return api.post('/professeur/profile/photo', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  getEtudiantsAssignes() {
+    return api.get('/professeur/etudiants')
   }
 }

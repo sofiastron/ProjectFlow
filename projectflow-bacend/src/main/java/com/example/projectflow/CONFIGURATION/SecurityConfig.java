@@ -1,5 +1,5 @@
 
-package com.example.projectflow.CONFIG;
+package com.example.projectflow.CONFIGURATION;
 
 import com.example.projectflow.SECURITY.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
